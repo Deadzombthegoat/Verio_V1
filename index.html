@@ -91,7 +91,7 @@
             font-size: 24px;
             color: #57ff20;
             margin-bottom: 20px;
-            display: none; /* Hide initially */
+            display: none;
         }
 
         .footer {
@@ -128,22 +128,19 @@
 
     <script>
         function logout() {
-            // Implement your logout logic here (e.g., clearing session storage or cookies)
             alert('Logged out successfully!');
-            // Optionally redirect to the login page
-            localStorage.removeItem('username'); // Clear username on logout
+            localStorage.removeItem('username');
             window.location.href = 'login.html';
         }
 
-        // Assume the username is stored in local storage when the user logs in
         const storedUsername = localStorage.getItem('username');
 
         if (storedUsername) {
             document.getElementById('username').innerText = storedUsername;
-            document.querySelector('.welcome').style.display = 'block'; // Show welcome message
-            document.querySelector('.auth-button').style.display = 'none'; // Hide login/registration buttons
+            document.querySelector('.welcome').style.display = 'block';
+            document.querySelector('.auth-button').style.display = 'none';
         } else {
-            document.querySelector('.logout-button').style.display = 'none'; // Hide logout button if not logged in
+            document.querySelector('.logout-button').style.display = 'none';
         }
     </script>
 </body>
