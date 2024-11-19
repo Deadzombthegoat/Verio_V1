@@ -23,7 +23,7 @@
             text-align: center;
         }
 
-        input[type="text"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -60,6 +60,7 @@
     <div class="registration-container">
         <h1>Register</h1>
         <input type="text" id="username" placeholder="Choose your username" required>
+        <input type="password" id="password" placeholder="Choose your password" required>
         <button onclick="register()">Register</button>
         <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
     </div>
@@ -67,11 +68,14 @@
     <script>
         function register() {
             const username = document.getElementById('username').value;
-            if (username) {
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
                 localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
                 window.location.href = 'index.html';
             } else {
-                alert('Please enter a username.');
+                alert('Please enter both username and password.');
             }
         }
     </script>
