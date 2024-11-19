@@ -82,13 +82,22 @@
 
     <div class="sidebar">
         <h1>Verio</h1>
-        <a href="leaderboard.html" class="button">Leaderboard</a>
-        <a href="shop.html" class="button">Shop</a>
-        <a href="inventory.html" class="button">Inventory</a>
-        <a href="settings.html" class="button">Settings</a>
+        <a href="leaderboard.html" class="button" onmouseover="playSound()">Leaderboard</a>
+        <a href="shop.html" class="button" onmouseover="playSound()">Shop</a>
+        <a href="inventory.html" class="button" onmouseover="playSound()">Inventory</a>
+        <a href="settings.html" class="button" onmouseover="playSound()">Settings</a>
     </div>
 
-    <a href="game.html" class="play-button">Play</a>
+    <a href="game.html" class="play-button" onmouseover="playSound()">Play</a>
+
+    <audio id="hover-sound" src="dark.mp3"></audio>
+
+    <script>
+        function playSound() {
+            document.getElementById('hover-sound').currentTime = 0; // Reset to start
+            document.getElementById('hover-sound').play();
+        }
+    </script>
 
 </body>
 </html>
