@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verio</title>
+    <style>
+        body {
+            background-color: cyan;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .button {
+            background-color: orange;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 25px;
+            background-color: rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .button:hover::before {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="button">Verio</button>
+
+</body>
+</html>
