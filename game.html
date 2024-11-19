@@ -65,9 +65,7 @@
         y: canvas.height - 60,
         width: 40,
         height: 40,
-        speed: 0,
-        acceleration: 0.2,
-        maxSpeed: 7, // Player speed adjustment
+        speed: 7, // Player speed adjustment (instant movement)
         health: 3,
         alive: true
     };
@@ -91,24 +89,32 @@
 
     // Function to spawn health pickups
     const spawnHealthPick = () => {
-        if (Math.random() < 0.2) { // 20% chance of spawning a health pickup
+        if (Math.random() < 0.1) { // Adjust spawn rate to 10%
             const x = Math.random() * (canvas.width - 30);
             healthPicks.push({ x, y: 0, width: 30, height: 30 });
         }
     };
 
     // Handle keyboard input
+    let leftPressed = false;
+    let rightPressed = false;
+
     document.addEventListener('keydown', (event) => {
         if (event.key === 'a' || event.key === 'ArrowLeft') {
-            player.speed = Math.max(player.speed - player.acceleration, -player.maxSpeed); // Move left
+            leftPressed = true; // Flag for left movement
+            player.x = Math.max(0, player.x - player.speed); // Instantly move left
         } else if (event.key === 'd' || event.key === 'ArrowRight') {
-            player.speed = Math.min(player.speed + player.acceleration, player.maxSpeed); // Move right
+            rightPressed = true; // Flag for right movement
+            player.x = Math.min(canvas.width - player.width, player.x + player.speed); // Instantly move right
         }
     });
 
     document.addEventListener('keyup', (event) => {
-        if (event.key === 'a' || event.key === 'ArrowLeft' || event.key === 'd' || event.key === 'ArrowRight') {
-            player.speed *= 0.8; // Slow down when key is released
+        if (event.key === 'a' || event.key === 'ArrowLeft') {
+            leftPressed = false; // No longer moving left
+        }
+        if (event.key === 'd' || event.key === 'ArrowRight') {
+            rightPressed = false; // No longer moving right
         }
     });
 
@@ -156,11 +162,6 @@
     function update() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Update player position with smoother movement
-        player.x += player.speed;
-        if (player.x < 0) player.x = 0; // Prevent moving off the left side
-        if (player.x > canvas.width - player.width) player.x = canvas.width - player.width; // Prevent moving off the right side
-
         // Draw player if alive
         if (player.alive) {
             ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
@@ -179,7 +180,7 @@
                 ctx.drawImage(zombieImg, zombie.x, zombie.y, zombie.width, zombie.height);
                 if (zombie.y > canvas.height) {
                     zombies.splice(zIndex, 1); // Remove zombie if it goes off-screen
-                    zombiesPassed++; // Increment zombies passed counter
+                    // Don't increment zombiesPassed for zombies going off-screen
                 }
 
                 // Check for collisions with bullets
@@ -238,7 +239,7 @@
         });
 
         // Adjust zoom level every minute
-        if (gameDuration % 300 === 0 && zoomLevel > MAX_ZOOM) {
+        if (Math.floor(gameDuration / 60) % 5 === 0 && zoomLevel > MAX_ZOOM) {
             zoomLevel -= 0.02; // Gradually zoom out every 5 mins
             canvas.style.transform = `scale(${zoomLevel})`; // Apply zoom
         }
@@ -251,6 +252,14 @@
 
     // Game Loop
     function gameLoop() {
+        // Update movement based on key presses
+        if (leftPressed) {
+            player.x = Math.max(0, player.x - player.speed); // Instantly move left
+        }
+        if (rightPressed) {
+            player.x = Math.min(canvas.width - player.width, player.x + player.speed); // Instantly move right
+        }
+
         update();
         gameDuration++; // Increment game duration timer
         requestAnimationFrame(gameLoop);
