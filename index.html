@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verio Game</title>
+    <title>Home - Verio</title>
     <style>
         * {
             box-sizing: border-box;
@@ -37,7 +37,7 @@
             text-shadow: 0 0 20px rgba(57, 255, 20, 1);
         }
 
-        .button {
+        .button, .logout-button, .auth-button {
             background-color: transparent;
             border: 2px solid transparent;
             color: #FFFFFF;
@@ -51,7 +51,7 @@
             border-radius: 5px;
         }
 
-        .button:hover {
+        .button:hover, .auth-button:hover {
             border-color: rgba(57, 255, 20, 0.9);
             text-shadow: 0 0 10px rgba(57, 255, 20, 1);
             background-color: rgba(57, 255, 20, 0.2);
@@ -84,23 +84,24 @@
             right: 20px;
             display: flex;
             flex-direction: column;
+            align-items: flex-end;
         }
 
-        .auth-button {
-            background-color: transparent;
-            border: 2px solid goldenrod;
-            color: #FFFFFF;
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 5px 0;
-            border-radius: 5px;
+        .welcome {
+            font-size: 24px;
+            color: #57ff20;
+            margin-bottom: 20px;
+            display: none; /* Hide initially */
+        }
+
+        .footer {
             text-align: center;
-            transition: all 0.3s ease;
+            margin-top: 20px;
         }
 
-        .auth-button:hover {
-            background-color: rgba(57, 255, 20, 0.2);
+        .footer a {
+            color: #57ff20;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -115,11 +116,35 @@
     </div>
 
     <div class="top-right">
+        <div class="welcome">
+            Welcome, <span id="username">YourUsername</span>!
+        </div>
+        <button class="logout-button" onclick="logout()">Logout</button>
         <a href="login.html" class="auth-button">Login</a>
         <a href="registration.html" class="auth-button">Registration</a>
     </div>
 
     <a href="game.html" class="play-button">Play</a>
 
+    <script>
+        function logout() {
+            // Implement your logout logic here (e.g., clearing session storage or cookies)
+            alert('Logged out successfully!');
+            // Optionally redirect to the login page
+            localStorage.removeItem('username'); // Clear username on logout
+            window.location.href = 'login.html';
+        }
+
+        // Assume the username is stored in local storage when the user logs in
+        const storedUsername = localStorage.getItem('username');
+
+        if (storedUsername) {
+            document.getElementById('username').innerText = storedUsername;
+            document.querySelector('.welcome').style.display = 'block'; // Show welcome message
+            document.querySelector('.auth-button').style.display = 'none'; // Hide login/registration buttons
+        } else {
+            document.querySelector('.logout-button').style.display = 'none'; // Hide logout button if not logged in
+        }
+    </script>
 </body>
 </html>
