@@ -19,24 +19,41 @@
         canvas {
             border: 2px solid #fff;
         }
+        #message {
+            display: none;
+        }
+        #restart-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #f00;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="message"></div>
+    <div id="message">
+        <p>You Lost!</p>
+        <button id="restart-button">Restart</button>
+    </div>
 </div>
 
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-
+    
     // Load images
     const playerImg = new Image();
     const zombieImg = new Image();
-    playerImg.src = 'player.png'; // Your player image file
-    zombieImg.src = 'zombie.png'; // Your zombie image file
+    const healthImg = new Image();
+    playerImg.src = 'player.png';
+    zombieImg.src = 'zombie.png';
+    healthImg.src = 'health.png'; // Replace with your health pickup image URL
 
     // Game variables
     const player = {
@@ -44,15 +61,18 @@
         y: canvas.height - 60,
         width: 40,
         height: 40,
-        speed: 5,
+        speed: 0,
         health: 3,
         alive: true
     };
 
     const bullets = [];
     const bulletSpeed = 8;
-    const zombies = [];
+    let zombies = [];
     const zombieSpeed = 1;
+    const healthPicks = [];
+    let score = 0; // Initialize score
+    let zombiesPassed = 0; // Count of zombies that have passed the player
 
     // Function to spawn zombies
     const spawnZombies = () => {
@@ -60,12 +80,26 @@
         zombies.push({ x, y: 0, width: 40, height: 40 });
     };
 
+    // Function to spawn health pickups
+    const spawnHealthPick = () => {
+        if (Math.random() < 0.2) { // 20% chance of spawning a health pickup
+            const x = Math.random() * (canvas.width - 30);
+            healthPicks.push({ x, y: 0, width: 30, height: 30 });
+        }
+    };
+
     // Handle keyboard input
     document.addEventListener('keydown', (event) => {
         if (event.key === 'a' || event.key === 'ArrowLeft') {
-            if (player.x > 0) player.x -= player.speed;
+            player.speed = -5; // Move left
         } else if (event.key === 'd' || event.key === 'ArrowRight') {
-            if (player.x < canvas.width - player.width) player.x += player.speed;
+            player.speed = 5; // Move right
+        }
+    });
+
+    document.addEventListener('keyup', (event) => {
+        if (event.key === 'a' || event.key === 'ArrowLeft' || event.key === 'd' || event.key === 'ArrowRight') {
+            player.speed = 0; // Stop moving when key is released
         }
     });
 
@@ -76,88 +110,131 @@
         }
     });
 
-    // Check for collisions with zombies
+    // Check collisions
     function checkCollisions() {
-        for (let i = 0; i < zombies.length; i++) {
-            const zombie = zombies[i];
-
-            // Check collision with player
+        zombies.forEach((zombie, zIndex) => {
+            // Check collision with the player
             if (
                 player.x < zombie.x + zombie.width &&
                 player.x + player.width > zombie.x &&
                 player.y < zombie.y + zombie.height &&
                 player.y + player.height > zombie.y
             ) {
-                player.health -= 1; // Lose health
-                zombies.splice(i, 1); // Remove zombie hit
+                player.health -= 1;
+                zombies.splice(zIndex, 1);
                 if (player.health <= 0) {
-                    player.alive = false; // Set player as dead
+                    player.alive = false; // Player has lost if health is 0
                 }
             }
-        }
+
+            // Check collision with health pickups
+            healthPicks.forEach((healthPick, hIndex) => {
+                if (
+                    player.x < healthPick.x + healthPick.width &&
+                    player.x + player.width > healthPick.x &&
+                    player.y < healthPick.y + healthPick.height &&
+                    player.y + player.height > healthPick.y
+                ) {
+                    player.health = Math.min(player.health + 1, 3); // Increase health up to a maximum of 3
+                    healthPicks.splice(hIndex, 1); // Remove the health pickup after being collected
+                    
+                    // Increment zombies passed whenever a health pickup is collected
+                    zombiesPassed++;
+                }
+            });
+        });
     }
 
     // Update Game
     function update() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Update player position with slippery effect
+        player.x += player.speed;
+        if (player.x < 0) player.x = 0; // Prevent moving off the left side
+        if (player.x > canvas.width - player.width) player.x = canvas.width - player.width; // Prevent moving off the right side
+
         // Draw player if alive
         if (player.alive) {
             ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
             // Update and draw bullets
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                const bullet = bullets[i];
+            bullets.forEach((bullet, bIndex) => {
                 bullet.y -= bulletSpeed;
                 ctx.fillStyle = 'red';
                 ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-                if (bullet.y < 0) bullets.splice(i, 1);
-            }
+                if (bullet.y < 0) bullets.splice(bIndex, 1); // Remove bullet if it goes off-screen
+            });
 
             // Update and draw zombies
-            for (let i = zombies.length - 1; i >= 0; i--) {
-                const zombie = zombies[i];
+            zombies.forEach((zombie, zIndex) => {
                 zombie.y += zombieSpeed;
                 ctx.drawImage(zombieImg, zombie.x, zombie.y, zombie.width, zombie.height);
                 if (zombie.y > canvas.height) {
-                    // If zombie reaches the bottom, player loses health
-                    player.health -= 1;
-                    zombies.splice(i, 1); // Remove zombie that has fallen
+                    zombies.splice(zIndex, 1); // Remove zombie if it goes off-screen
+                    zombiesPassed++; // Increment zombies passed counter
                 }
 
-                // Check for collision with bullets
-                for (let j = bullets.length - 1; j >= 0; j--) {
-                    const bullet = bullets[j];
+                // Check for collisions with bullets
+                bullets.forEach((bullet, bIndex) => {
                     if (
                         bullet.x < zombie.x + zombie.width &&
                         bullet.x + bullet.width > zombie.x &&
                         bullet.y < zombie.y + zombie.height &&
                         bullet.y + bullet.height > zombie.y
                     ) {
-                        zombies.splice(i, 1);
-                        bullets.splice(j, 1);
-                        break;
+                        zombies.splice(zIndex, 1);
+                        bullets.splice(bIndex, 1);
+                        score++; // Increase score when a zombie is hit
                     }
-                }
-            }
+                });
+            });
 
-            // Check for health and collisions
+            // Check for health loss from zombies
             checkCollisions();
+
+            // Check if 10 zombies have passed
+            if (zombiesPassed >= 10) {
+                player.alive = false; // Player loses if 10 zombies pass
+            }
         } else {
-            // Show game over message
+            // Display loss screen
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
             ctx.fillText("You Lost!", canvas.width / 2 - 30, canvas.height / 2);
-            ctx.fillText("Redirecting...", canvas.width / 2 - 40, canvas.height / 2 + 30);
-            setTimeout(() => {
-                window.location.href = 'index.html'; // Redirect after 2 seconds
-            }, 2000);
+            ctx.fillText("Final Score: " + score, canvas.width / 2 - 30, canvas.height / 2 + 30);
+            document.getElementById('message').style.display = 'block';
         }
 
-        // Display remaining health
+        // Draw health bar
+        ctx.fillStyle = 'red';
+        ctx.fillRect(10, 10, 100, 10);
+        ctx.fillStyle = 'green';
+        ctx.fillRect(10, 10, player.health * 33.33, 10); // Health bar based on remaining health
+
+        // Draw score
         ctx.fillStyle = 'white';
         ctx.font = '20px Arial';
-        ctx.fillText(`Health: ${player.health}`, 10, 30);
+        ctx.fillText("Score: " + score, canvas.width - 100, 30); // Display score at the top right
+
+        // Draw zombies passed
+        ctx.fillText("Zombies Passed: " + zombiesPassed, 10, 30); // Display zombies passed count
+
+        // Spawn health pickups
+        spawnHealthPick();
+        healthPicks.forEach((healthPick) => {
+            healthPick.y += 1; // Move health pickup down
+            ctx.drawImage(healthImg, healthPick.x, healthPick.y, healthPick.width, healthPick.height);
+            if (healthPick.y > canvas.height) {
+                healthPicks.splice(healthPicks.indexOf(healthPick), 1); // Remove health pick if off screen
+            }
+        });
     }
+
+    // Restart game
+    document.getElementById('restart-button').addEventListener('click', () => {
+        window.location.href = 'index.html'; // Redirect to index.html
+    });
 
     // Game Loop
     function gameLoop() {
