@@ -15,9 +15,13 @@
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
+            overflow: hidden; /* Disable scrolling */
         }
         canvas {
             border: 2px solid #fff;
+            background-color: #444; /* Slightly dark background for clarity */
+            transform: scale(1); /* Default zoom */
+            transform-origin: top left; /* Zoom out from the top-left */
         }
         #message {
             display: none;
@@ -46,7 +50,7 @@
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    
+
     // Load images
     const playerImg = new Image();
     const zombieImg = new Image();
@@ -62,6 +66,8 @@
         width: 40,
         height: 40,
         speed: 0,
+        acceleration: 0.2,
+        maxSpeed: 7, // Player speed adjustment
         health: 3,
         alive: true
     };
@@ -69,15 +75,18 @@
     const bullets = [];
     const bulletSpeed = 8;
     let zombies = [];
-    const zombieSpeed = 1;
+    let zombieSpeed = 1; // Initial zombie speed
     const healthPicks = [];
     let score = 0; // Initialize score
     let zombiesPassed = 0; // Count of zombies that have passed the player
-
-    // Function to spawn zombies
+    let gameDuration = 0; // Game duration in seconds
+    let zoomLevel = 1; // Initial zoom level, starts at 1 (normal view)
+    const MAX_ZOOM = 0.7; // Maximum zoom out factor (70%)
+    
+    // Spawn zombies off-screen
     const spawnZombies = () => {
         const x = Math.random() * (canvas.width - 40);
-        zombies.push({ x, y: 0, width: 40, height: 40 });
+        zombies.unshift({ x, y: -40, width: 40, height: 40 }); // Spawn off-screen
     };
 
     // Function to spawn health pickups
@@ -91,15 +100,15 @@
     // Handle keyboard input
     document.addEventListener('keydown', (event) => {
         if (event.key === 'a' || event.key === 'ArrowLeft') {
-            player.speed = -5; // Move left
+            player.speed = Math.max(player.speed - player.acceleration, -player.maxSpeed); // Move left
         } else if (event.key === 'd' || event.key === 'ArrowRight') {
-            player.speed = 5; // Move right
+            player.speed = Math.min(player.speed + player.acceleration, player.maxSpeed); // Move right
         }
     });
 
     document.addEventListener('keyup', (event) => {
         if (event.key === 'a' || event.key === 'ArrowLeft' || event.key === 'd' || event.key === 'ArrowRight') {
-            player.speed = 0; // Stop moving when key is released
+            player.speed *= 0.8; // Slow down when key is released
         }
     });
 
@@ -137,9 +146,7 @@
                 ) {
                     player.health = Math.min(player.health + 1, 3); // Increase health up to a maximum of 3
                     healthPicks.splice(hIndex, 1); // Remove the health pickup after being collected
-                    
-                    // Increment zombies passed whenever a health pickup is collected
-                    zombiesPassed++;
+                    zombiesPassed++; // Increment zombies passed when collecting health
                 }
             });
         });
@@ -149,7 +156,7 @@
     function update() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Update player position with slippery effect
+        // Update player position with smoother movement
         player.x += player.speed;
         if (player.x < 0) player.x = 0; // Prevent moving off the left side
         if (player.x > canvas.width - player.width) player.x = canvas.width - player.width; // Prevent moving off the right side
@@ -229,6 +236,12 @@
                 healthPicks.splice(healthPicks.indexOf(healthPick), 1); // Remove health pick if off screen
             }
         });
+
+        // Adjust zoom level every minute
+        if (gameDuration % 300 === 0 && zoomLevel > MAX_ZOOM) {
+            zoomLevel -= 0.02; // Gradually zoom out every 5 mins
+            canvas.style.transform = `scale(${zoomLevel})`; // Apply zoom
+        }
     }
 
     // Restart game
@@ -239,6 +252,7 @@
     // Game Loop
     function gameLoop() {
         update();
+        gameDuration++; // Increment game duration timer
         requestAnimationFrame(gameLoop);
     }
 
