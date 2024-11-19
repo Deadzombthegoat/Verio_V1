@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D FPS Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/PointerLockControls.js"></script>
+<script>
+    // Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Controls
+    const controls = new THREE.PointerLockControls(camera, document.body);
+    document.body.addEventListener('click', () => controls.lock());
+
+    // Ground
+    const groundGeometry = new THREE.PlaneGeometry(100, 100);
+    const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Player
+    const player = {
+        velocity: new THREE.Vector3(),
+        onGround: false,
+    };
+
+    // Boxes (obstacles)
+    const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const boxMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    for (let i = 0; i < 10; i++) {
+        const box = new THREE.Mesh(boxGeometry, boxMaterial);
+        box.position.set(Math.random() * 20 - 10, 0.5, Math.random() * 20 - 10);
+        scene.add(box);
+    }
+
+    // Light
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(10, 10, 10);
+    scene.add(light);
+
+    // Physics and Movement
+    const keys = {};
+    document.addEventListener('keydown', (e) => (keys[e.code] = true));
+    document.addEventListener('keyup', (e) => (keys[e.code] = false));
+
+    const clock = new THREE.Clock();
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        const delta = clock.getDelta();
+
+        // Movement
+        if (keys['KeyW']) player.velocity.z -= 10 * delta;
+        if (keys['KeyS']) player.velocity.z += 10 * delta;
+        if (keys['KeyA']) player.velocity.x -= 10 * delta;
+        if (keys['KeyD']) player.velocity.x += 10 * delta;
+
+        // Gravity
+        player.velocity.y -= 9.8 * delta;
+
+        // Jump
+        if (keys['Space'] && player.onGround) {
+            player.velocity.y = 5;
+            player.onGround = false;
+        }
+
+        // Apply movement
+        controls.moveRight(player.velocity.x * delta);
+        controls.moveForward(player.velocity.z * delta);
+        camera.position.y += player.velocity.y * delta;
+
+        // Ground collision
+        if (camera.position.y < 1.8) {
+            player.velocity.y = 0;
+            camera.position.y = 1.8;
+            player.onGround = true;
+        }
+
+        // Damping
+        player.velocity.x *= 0.9;
+        player.velocity.z *= 0.9;
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+</script>
+</body>
+</html>
