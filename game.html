@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verio</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #333;
+        }
+        canvas {
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Load images
+    const playerImg = new Image();
+    const zombieImg = new Image();
+    playerImg.src = 'player.png'; // Your player image file
+    zombieImg.src = 'zombie.png'; // Your zombie image file
+
+    // Player properties
+    const player = {
+        x: canvas.width / 2,
+        y: canvas.height - 60,
+        width: 40,
+        height: 40,
+        speed: 5,
+        alive: true
+    };
+
+    // Bullet properties
+    const bullets = [];
+    const bulletSpeed = 8;
+
+    // Zombie properties
+    const zombies = [];
+    const zombieSpeed = 1;
+
+    // Function to spawn zombies
+    const spawnZombies = () => {
+        const x = Math.random() * (canvas.width - 40);
+        zombies.push({ x, y: 0, width: 40, height: 40 });
+    };
+
+    // Handle keyboard input
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowLeft' && player.x > 0) {
+            player.x -= player.speed;
+        } else if (event.key === 'ArrowRight' && player.x < canvas.width - player.width) {
+            player.x += player.speed;
+        } else if (event.key === ' ') {
+            bullets.push({ x: player.x + player.width / 2 - 2, y: player.y, width: 5, height: 10 });
+        }
+    });
+
+    // Check for collisions with zombies
+    function checkCollisions() {
+        for (let i = 0; i < zombies.length; i++) {
+            const zombie = zombies[i];
+
+            // Check collision with player
+            if (
+                player.x < zombie.x + zombie.width &&
+                player.x + player.width > zombie.x &&
+                player.y < zombie.y + zombie.height &&
+                player.y + player.height > zombie.y
+            ) {
+                player.alive = false;
+            }
+        }
+    }
+
+    // Update Game
+    function update() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw player if alive
+        if (player.alive) {
+            ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+
+            // Update and draw bullets
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                bullet.y -= bulletSpeed;
+                ctx.fillStyle = 'yellow';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+                if (bullet.y < 0) bullets.splice(i, 1);
+            }
+
+            // Update and draw zombies
+            for (let i = zombies.length - 1; i >= 0; i--) {
+                const zombie = zombies[i];
+                zombie.y += zombieSpeed;
+                ctx.drawImage(zombieImg, zombie.x, zombie.y, zombie.width, zombie.height);
+                if (zombie.y > canvas.height) zombies.splice(i, 1);
+
+                // Check for collision with bullets
+                for (let j = bullets.length - 1; j >= 0; j--) {
+                    const bullet = bullets[j];
+                    if (
+                        bullet.x < zombie.x + zombie.width &&
+                        bullet.x + bullet.width > zombie.x &&
+                        bullet.y < zombie.y + zombie.height &&
+                        bullet.y + bullet.height > zombie.y
+                    ) {
+                        zombies.splice(i, 1);
+                        bullets.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+
+            // Check for collisions with zombies
+            checkCollisions();
+        } else {
+            // Redirect to index.html if the player dies
+            window.location.href = 'index.html';
+        }
+    }
+
+    // Game Loop
+    function gameLoop() {
+        update();
+        requestAnimationFrame(gameLoop);
+    }
+
+    // Spawn zombies every 1 second
+    setInterval(spawnZombies, 1000);
+    gameLoop();
+
+</script>
+
+</body>
+</html>
