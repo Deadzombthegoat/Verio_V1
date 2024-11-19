@@ -5,92 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Verio</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #282c34;
-            color: #ffffff;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        .form-box {
-            background: rgba(30, 30, 30, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.7);
-            width: 300px;
-        }
-
-        .form-box h2 {
-            text-align: center;
-            color: #57ff20;
-            margin-bottom: 20px;
-        }
-
-        .form-box input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #444;
+            height: 100vh;
+            background-color: black;
             color: white;
-            font-size: 16px;
-            transition: background 0.3s;
+            font-family: 'Arial', sans-serif;
         }
 
-        .form-box input:focus {
-            background: #555;
-            outline: none;
+        .login-container {
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+            text-align: center;
         }
 
-        .form-box button {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
+            margin: 10px 0;
+            border: 2px solid rgba(57, 255, 20, 0.7);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: rgba(57, 255, 20, 0.8);
             border: none;
             border-radius: 5px;
-            background: goldenrod;
             color: black;
-            font-size: 18px;
-            transition: background 0.3s;
+            font-size: 16px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .form-box button:hover {
-            background: #ffd700;
+        button:hover {
+            background-color: rgba(57, 255, 20, 1);
+            transform: scale(1.05);
         }
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .footer a {
-            color: #57ff20;
-            text-decoration: none;
+        .register-link {
+            margin-top: 15px;
+            color: rgba(57, 255, 20, 0.9);
         }
     </style>
 </head>
 <body>
 
-    <div class="form-box">
-        <h2>Login</h2>
-        <form action="index.html" method="POST">
-            <input type="text" placeholder="Username or Email" required>
-            <input type="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <div class="footer">
-            <p>Don't have an account? <a href="registration.html">Register here</a></p>
-        </div>
+    <div class="login-container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Enter your username" required>
+        <button onclick="login()">Login</button>
+        <p class="register-link">Don't have an account? <a href="registration.html">Register here</a></p>
     </div>
 
+    <script>
+        function login() {
+            const username = document.getElementById('username').value;
+            if (username) {
+                localStorage.setItem('username', username);
+                window.location.href = 'index.html';
+            } else {
+                alert('Please enter a username.');
+            }
+        }
+    </script>
 </body>
 </html>
