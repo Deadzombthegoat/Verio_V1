@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verio</title>
+    <title>Verio Game</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,6 +17,7 @@
             height: 100vh;
             overflow: hidden;
             display: flex;
+            position: relative;
         }
 
         .sidebar {
@@ -24,7 +25,6 @@
             background: rgba(0, 0, 0, 0.8);
             padding: 30px;
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.7);
-            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -34,6 +34,7 @@
             color: #FFFFFF;
             font-size: 36px;
             margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(57, 255, 20, 1);
         }
 
         .button {
@@ -62,10 +63,10 @@
             right: 30px;
             background-color: black;
             color: goldenrod;
-            padding: 20px 40px;
+            padding: 30px 50px;
             border-radius: 25px;
             border: 2px solid goldenrod;
-            font-size: 24px;
+            font-size: 32px;
             text-decoration: none;
             transition: all 0.3s ease;
         }
@@ -74,7 +75,32 @@
             background-color: goldenrod;
             color: black;
             cursor: pointer;
-            transform: scale(1.05);
+            transform: scale(1.1);
+        }
+
+        .top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-button {
+            background-color: transparent;
+            border: 2px solid goldenrod;
+            color: #FFFFFF;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 5px 0;
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background-color: rgba(57, 255, 20, 0.2);
         }
     </style>
 </head>
@@ -82,22 +108,18 @@
 
     <div class="sidebar">
         <h1>Verio</h1>
-        <a href="leaderboard.html" class="button" onmouseover="playSound()">Leaderboard</a>
-        <a href="shop.html" class="button" onmouseover="playSound()">Shop</a>
-        <a href="inventory.html" class="button" onmouseover="playSound()">Inventory</a>
-        <a href="settings.html" class="button" onmouseover="playSound()">Settings</a>
+        <a href="leaderboard.html" class="button">Leaderboard</a>
+        <a href="shop.html" class="button">Shop</a>
+        <a href="inventory.html" class="button">Inventory</a>
+        <a href="settings.html" class="button">Settings</a>
     </div>
 
-    <a href="game.html" class="play-button" onmouseover="playSound()">Play</a>
+    <div class="top-right">
+        <a href="login.html" class="auth-button">Login</a>
+        <a href="registration.html" class="auth-button">Registration</a>
+    </div>
 
-    <audio id="hover-sound" src="dark.mp3"></audio>
-
-    <script>
-        function playSound() {
-            document.getElementById('hover-sound').currentTime = 0; // Reset to start
-            document.getElementById('hover-sound').play();
-        }
-    </script>
+    <a href="game.html" class="play-button">Play</a>
 
 </body>
 </html>
