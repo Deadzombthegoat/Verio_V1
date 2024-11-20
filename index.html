@@ -142,7 +142,7 @@
         }
 
         #leaderboard th, #leaderboard td,
-        #settings p, #inventory .skin-list {
+        #settings p {
             padding: 8px;
             text-align: left;
         }
@@ -155,21 +155,30 @@
             background: rgba(57, 255, 20, 0.8);
         }
 
-        /* New styles for inventory */
-        .skin-list {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            padding: 20px;
+        /* Inventory Styles */
+        .inventory-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Space between rectangles */
         }
 
-        .skin-item {
+        .green-rectangle {
+            width: 300px; /* Width of the green rectangle */
+            height: 50px; /* Height of the green rectangle */
             background-color: green;
-            border-radius: 10px;
-            height: 100px; /* Height of each skin item */
-            margin: 5px;
-            text-align: center;
-            line-height: 100px; /* Center text vertically */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        .skin-count {
+            margin-top: 10px;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -179,7 +188,7 @@
         <h1>Verio</h1>
         <button class="button" onclick="openModal('leaderboardModal')">Leaderboard</button>
         <button class="button" onclick="openModal('settingsModal')">Settings</button>
-        <button class="button" onclick="openModal('inventoryModal')">Inventory</button> <!-- New Inventory Button -->
+        <button class="button" onclick="openModal('inventoryModal')">Inventory</button> <!-- Inventory button -->
         <a href="shop.html" class="button">Shop</a>
         <button class="button" onclick="openModal('clanModal')">Clans</button>
     </div>
@@ -294,25 +303,25 @@
         </div>
     </div>
     
-    <div id="inventoryModal" class="modal"> <!-- New Inventory Modal -->
+    <div id="inventoryModal" class="modal"> <!-- Inventory Modal -->
         <div class="modal-content">
             <span class="close" onclick="closeModal('inventoryModal')">&times;</span>
             <h2>Inventory</h2>
-            <div class="skin-list">
-                <div class="skin-item">Skin 1</div>
-                <div class="skin-item">Skin 2</div>
-                <div class="skin-item">Skin 3</div>
-                <div class="skin-item">Skin 4</div>
-                <div class="skin-item">Skin 5</div>
-                <div class="skin-item">Skin 6</div>
-                <div class="skin-item">Skin 7</div>
-                <div class="skin-item">Skin 8</div>
-                <div class="skin-item">Skin 9</div>
-                <div class="skin-item">Skin 10</div>
-                <div class="skin-item">Skin 11</div>
-                <div class="skin-item">Skin 12</div>
+            <div class="inventory-container">
+                <div class="green-rectangle">Skin 1</div>
+                <div class="green-rectangle">Skin 2</div>
+                <div class="green-rectangle">Skin 3</div>
+                <div class="green-rectangle">Skin 4</div>
+                <div class="green-rectangle">Skin 5</div>
+                <div class="green-rectangle">Skin 6</div>
+                <div class="green-rectangle">Skin 7</div>
+                <div class="green-rectangle">Skin 8</div>
+                <div class="green-rectangle">Skin 9</div>
+                <div class="green-rectangle">Skin 10</div>
+                <div class="green-rectangle">Skin 11</div>
+                <div class="green-rectangle">Skin 12</div>
             </div>
-            <p>Skins - 12</p>
+            <div class="skin-count">Skins - 12</div> <!-- Example count -->
         </div>
     </div>
 
@@ -348,7 +357,7 @@
             closeModal('settingsModal');
             closeModal('inventoryModal');
             closeModal('clanModal');
-            
+
             document.getElementById(modalId).style.display = 'block';
         }
 
