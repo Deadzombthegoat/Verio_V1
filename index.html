@@ -49,6 +49,7 @@
             font-size: 18px;
             transition: all 0.3s ease;
             border-radius: 5px;
+            cursor: pointer;
         }
 
         .button:hover, .auth-button:hover {
@@ -141,16 +142,134 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        .dropdown {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .dropdown.active {
+            display: flex;
+        }
+
+        #leaderboard {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #leaderboard th, #leaderboard td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        #leaderboard tr:nth-child(even) {
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        #leaderboard th {
+            background: rgba(57, 255, 20, 0.8);
+        }
+
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <h1>Verio</h1>
-        <button class="button" onclick="openModal('leaderboardModal')">Leaderboard</button>
-        <button class="button" onclick="openModal('settingsModal')">Settings</button>
-        <a href="shop.html" class="button">Shop</a>
-        <a href="inventory.html" class="button">Inventory</a>
+        <button class="button" onclick="toggleDropdown('leaderboardDropdown')">Leaderboard</button>
+        <div id="leaderboardDropdown" class="dropdown">
+            <h2>Leaderboard</h2>
+            <table id="leaderboard">
+                <tr>
+                    <th>Position</th>
+                    <th>Username</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>Clan</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+            </table>
+        </div>
+        <button class="button" onclick="toggleDropdown('settingsDropdown')">Settings</button>
+        <div id="settingsDropdown" class="dropdown">
+            <h2>Settings</h2>
+            <p><strong>Graphics:</strong> Low / Medium / High</p>
+            <p><strong>Volume:</strong> 0% / 50% / 100%</p>
+            <p><strong>Controls:</strong> WASD for movement, Mouse to aim</p>
+            <p><strong>Mouse Sensitivity:</strong> Low / Medium / High</p>
+            <p><strong>Field of View (FOV):</strong> 60 / 90 / 120</p>
+        </div>
+        <button class="button" onclick="openModal('clanModal')">Clans</button>
     </div>
 
     <div class="top-right">
@@ -168,7 +287,85 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('leaderboardModal')">&times;</span>
             <h2>Leaderboard</h2>
-            <p>Here you can see the top scores...</p>
+            <table id="leaderboard">
+                <tr>
+                    <th>Position</th>
+                    <th>Username</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>Clan</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>No one</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>No Clan</td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -176,7 +373,21 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('settingsModal')">&times;</span>
             <h2>Settings</h2>
-            <p>Here you can change your settings...</p>
+            <p>Adjust your game settings here.</p>
+            <p><strong>Graphics:</strong> Low / Medium / High</p>
+            <p><strong>Volume:</strong> 0% / 50% / 100%</p>
+            <p><strong>Controls:</strong> WASD for movement, Mouse to aim</p>
+            <p><strong>Mouse Sensitivity:</strong> Low / Medium / High</p>
+            <p><strong>Field of View (FOV):</strong> 60 / 90 / 120</p>
+        </div>
+    </div>
+    
+    <div id="clanModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('clanModal')">&times;</span>
+            <h2>Clan Information</h2>
+            <p>Manage your clans here.</p>
+            <p>Coming soon...</p>
         </div>
     </div>
 
@@ -197,6 +408,11 @@
             document.querySelector('.logout-button').style.display = 'none';
         }
 
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('active');
+        }
+
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'block';
         }
@@ -208,11 +424,15 @@
         window.onclick = function(event) {
             const leaderboardModal = document.getElementById('leaderboardModal');
             const settingsModal = document.getElementById('settingsModal');
+            const clanModal = document.getElementById('clanModal');
             if (event.target === leaderboardModal) {
                 leaderboardModal.style.display = 'none';
             }
             if (event.target === settingsModal) {
                 settingsModal.style.display = 'none';
+            }
+            if (event.target === clanModal) {
+                clanModal.style.display = 'none';
             }
         }
     </script>
