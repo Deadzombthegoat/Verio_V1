@@ -104,9 +104,8 @@
             text-decoration: none;
         }
 
-        /* Modal styles */
         .modal {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed; 
             z-index: 1000; 
             left: 0;
@@ -118,12 +117,15 @@
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; 
+            background-color: black;
+            margin: auto; 
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%; 
-            color: black;
+            border: 1px solid rgba(57, 255, 20, 0.9); 
+            border-radius: 15px; 
+            width: 60%; 
+            max-width: 800px; 
+            box-shadow: 0 0 20px rgba(57, 255, 20, 1); 
+            color: white; 
         }
 
         .close {
@@ -135,7 +137,7 @@
 
         .close:hover,
         .close:focus {
-            color: black;
+            color: white;
             text-decoration: none;
             cursor: pointer;
         }
@@ -162,23 +164,19 @@
 
     <a href="game.html" class="play-button">Play</a>
 
-    <!-- Leaderboard Modal -->
     <div id="leaderboardModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('leaderboardModal')">&times;</span>
             <h2>Leaderboard</h2>
             <p>Here you can see the top scores...</p>
-            <!-- Add your leaderboard content here -->
         </div>
     </div>
 
-    <!-- Settings Modal -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('settingsModal')">&times;</span>
             <h2>Settings</h2>
             <p>Here you can change your settings...</p>
-            <!-- Add your settings content here -->
         </div>
     </div>
 
@@ -207,7 +205,6 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        // Close the modal when clicking outside of it
         window.onclick = function(event) {
             const leaderboardModal = document.getElementById('leaderboardModal');
             const settingsModal = document.getElementById('settingsModal');
