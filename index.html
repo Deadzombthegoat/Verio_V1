@@ -135,13 +135,14 @@
         }
 
         #leaderboard,
-        #settings {
+        #settings,
+        #inventory {
             display: flex;
             flex-direction: column;
         }
 
         #leaderboard th, #leaderboard td,
-        #settings p {
+        #settings p, #inventory .skin-list {
             padding: 8px;
             text-align: left;
         }
@@ -153,6 +154,23 @@
         #leaderboard th {
             background: rgba(57, 255, 20, 0.8);
         }
+
+        /* New styles for inventory */
+        .skin-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 20px;
+        }
+
+        .skin-item {
+            background-color: green;
+            border-radius: 10px;
+            height: 100px; /* Height of each skin item */
+            margin: 5px;
+            text-align: center;
+            line-height: 100px; /* Center text vertically */
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -161,8 +179,8 @@
         <h1>Verio</h1>
         <button class="button" onclick="openModal('leaderboardModal')">Leaderboard</button>
         <button class="button" onclick="openModal('settingsModal')">Settings</button>
+        <button class="button" onclick="openModal('inventoryModal')">Inventory</button> <!-- New Inventory Button -->
         <a href="shop.html" class="button">Shop</a>
-        <a href="inventory.html" class="button">Inventory</a>
         <button class="button" onclick="openModal('clanModal')">Clans</button>
     </div>
 
@@ -189,6 +207,7 @@
                     <th>Deaths</th>
                     <th>Clan</th>
                 </tr>
+                <!-- Leaderboard rows -->
                 <tr>
                     <td>1</td>
                     <td>No one</td>
@@ -275,6 +294,28 @@
         </div>
     </div>
     
+    <div id="inventoryModal" class="modal"> <!-- New Inventory Modal -->
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('inventoryModal')">&times;</span>
+            <h2>Inventory</h2>
+            <div class="skin-list">
+                <div class="skin-item">Skin 1</div>
+                <div class="skin-item">Skin 2</div>
+                <div class="skin-item">Skin 3</div>
+                <div class="skin-item">Skin 4</div>
+                <div class="skin-item">Skin 5</div>
+                <div class="skin-item">Skin 6</div>
+                <div class="skin-item">Skin 7</div>
+                <div class="skin-item">Skin 8</div>
+                <div class="skin-item">Skin 9</div>
+                <div class="skin-item">Skin 10</div>
+                <div class="skin-item">Skin 11</div>
+                <div class="skin-item">Skin 12</div>
+            </div>
+            <p>Skins - 12</p>
+        </div>
+    </div>
+
     <div id="clanModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('clanModal')">&times;</span>
@@ -305,6 +346,7 @@
             // Close other modals before opening a new one
             closeModal('leaderboardModal');
             closeModal('settingsModal');
+            closeModal('inventoryModal');
             closeModal('clanModal');
             
             document.getElementById(modalId).style.display = 'block';
@@ -318,6 +360,7 @@
             const leaderboardModal = document.getElementById('leaderboardModal');
             const settingsModal = document.getElementById('settingsModal');
             const clanModal = document.getElementById('clanModal');
+            const inventoryModal = document.getElementById('inventoryModal');
             if (event.target === leaderboardModal) {
                 leaderboardModal.style.display = 'none';
             }
@@ -326,6 +369,9 @@
             }
             if (event.target === clanModal) {
                 clanModal.style.display = 'none';
+            }
+            if (event.target === inventoryModal) {
+                inventoryModal.style.display = 'none';
             }
         }
     </script>
