@@ -95,16 +95,6 @@
             display: none;
         }
 
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .footer a {
-            color: #57ff20;
-            text-decoration: none;
-        }
-
         .modal {
             display: none;
             position: fixed; 
@@ -154,12 +144,14 @@
             display: flex;
         }
 
-        #leaderboard {
+        #leaderboard,
+        #settings {
             display: flex;
             flex-direction: column;
         }
 
-        #leaderboard th, #leaderboard td {
+        #leaderboard th, #leaderboard td,
+        #settings p {
             padding: 8px;
             text-align: left;
         }
@@ -181,95 +173,13 @@
         <button class="button" onclick="toggleDropdown('leaderboardDropdown')">Leaderboard</button>
         <div id="leaderboardDropdown" class="dropdown">
             <h2>Leaderboard</h2>
-            <table id="leaderboard">
-                <tr>
-                    <th>Position</th>
-                    <th>Username</th>
-                    <th>Kills</th>
-                    <th>Deaths</th>
-                    <th>Clan</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>No one</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>No Clan</td>
-                </tr>
-            </table>
+            <button class="button" onclick="openModal('leaderboardModal')">View Leaderboard</button>
         </div>
         
         <button class="button" onclick="toggleDropdown('settingsDropdown')">Settings</button>
         <div id="settingsDropdown" class="dropdown">
             <h2>Settings</h2>
-            <p><strong>Graphics:</strong> Low / Medium / High</p>
-            <p><strong>Volume:</strong> 0% / 50% / 100%</p>
-            <p><strong>Controls:</strong> WASD for movement, Mouse to aim</p>
-            <p><strong>Mouse Sensitivity:</strong> Low / Medium / High</p>
-            <p><strong>Field of View (FOV):</strong> 60 / 90 / 120</p>
+            <button class="button" onclick="openModal('settingsModal')">Open Settings</button>
         </div>
         
         <a href="shop.html" class="button">Shop</a>
@@ -375,10 +285,9 @@
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="background-color: rgba(30, 30, 30, 0.9);">
             <span class="close" onclick="closeModal('settingsModal')">&times;</span>
             <h2>Settings</h2>
-            <p>Adjust your game settings here.</p>
             <p><strong>Graphics:</strong> Low / Medium / High</p>
             <p><strong>Volume:</strong> 0% / 50% / 100%</p>
             <p><strong>Controls:</strong> WASD for movement, Mouse to aim</p>
