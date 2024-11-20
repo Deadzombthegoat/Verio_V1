@@ -127,6 +127,7 @@
             max-width: 800px; 
             box-shadow: 0 0 20px rgba(57, 255, 20, 1); 
             color: white; 
+            position: relative;
         }
 
         .close {
@@ -260,6 +261,7 @@
                 </tr>
             </table>
         </div>
+        
         <button class="button" onclick="toggleDropdown('settingsDropdown')">Settings</button>
         <div id="settingsDropdown" class="dropdown">
             <h2>Settings</h2>
@@ -269,6 +271,9 @@
             <p><strong>Mouse Sensitivity:</strong> Low / Medium / High</p>
             <p><strong>Field of View (FOV):</strong> 60 / 90 / 120</p>
         </div>
+        
+        <a href="shop.html" class="button">Shop</a>
+        <a href="inventory.html" class="button">Inventory</a>
         <button class="button" onclick="openModal('clanModal')">Clans</button>
     </div>
 
@@ -414,6 +419,11 @@
         }
 
         function openModal(modalId) {
+            // Close other modals before opening a new one
+            closeModal('leaderboardModal');
+            closeModal('settingsModal');
+            closeModal('clanModal');
+            
             document.getElementById(modalId).style.display = 'block';
         }
 
